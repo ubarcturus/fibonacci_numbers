@@ -1,7 +1,35 @@
+use std::io;
+
 fn main() {
-    let nth = 6;
+    let nth = read_nth();
     let fibonacci = calculate_nth_fibonacci(nth);
-    println!("{fibonacci} is the {nth}th fibonacci number.");
+    println!("{fibonacci} is the {nth}th Fibonacci number.");
+}
+
+fn read_nth() -> i32 {
+    println!("What is the desired nth Fibonacci number?");
+
+    let mut attempts = 0;
+    loop {
+        let mut nth = String::new();
+        io::stdin()
+            .read_line(&mut nth)
+            .expect("Failed to read line");
+
+        let nth: i32 = match nth.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                if attempts < 3 {
+                    println!("Please insert positiv numbers only.");
+                } else {
+                    println!("Really? Only positiv numbers.");
+                }
+                attempts += 1;
+                continue;
+            }
+        };
+        return nth;
+    }
 }
 
 fn calculate_nth_fibonacci(nth: i32) -> u64 {
